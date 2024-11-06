@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  web:
+    build: ./prices/api
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./prices/api:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - my-postgres
+    environment:
+      - POSTGRES_DB=djangodb
+      - POSTGRES_USER=digiusher_user
+      - POSTGRES_PASSWORD=digiusher
+      - POSTGRES_HOST=my-postgres
+      - POSTGRES_PORT=5432
+
+  my-postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: digiusher_user
+      POSTGRES_PASSWORD: digiusher
+      POSTGRES_DB: djangodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    build: ./frontend  # Path to your Next.js frontend folder
+    command: "npm run dev"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://0.0.0.0:8000  # URL to Django backend service
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
