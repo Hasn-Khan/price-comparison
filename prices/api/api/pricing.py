@@ -18,7 +18,7 @@ class CloudPriceListView(APIView):
         if location:
             queryset = queryset.filter(location=location)
         if num_cpus:
-            queryset = queryset.filter(num_cpus=num_cpus)
+            queryset = queryset.filter(num_cpu=num_cpus)
         if ram_gb:
             queryset = queryset.filter(ram_gb=ram_gb)
 
