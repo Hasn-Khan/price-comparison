@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface CloudPrice {
   id: number
@@ -27,17 +27,19 @@ export default function Home() {
     })
 
     try {
-      console.log(queryParams.toString())
       const response = await fetch(
         `http://localhost:8000/api/?${queryParams.toString()}`
       )
       const data = await response.json()
-      console.log("Data",data)
       setPrices(data)
     } catch (error) {
       console.error('Error fetching prices:', error)
     }
   }
+
+  useEffect(() => {
+    fetchPrices()
+  }, [])
 
   return (
     <div className="container mx-auto p-4">
@@ -101,15 +103,19 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {prices.map((price: CloudPrice) => (
-                  <tr key={price.id}>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium">{price.cloud_type.toUpperCase()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{price.location}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{price.num_cpu}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{price.ram_gb}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">${price.price}</td>
-                  </tr>
-                ))}
+                {prices.length > 0 ? (
+                  prices.map((price: CloudPrice) => (
+                    <tr key={price.id}>
+                      <td className="px-6 py-4 whitespace-nowrap font-medium">{price.cloud_type.toUpperCase()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{price.location}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{price.num_cpu}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{price.ram_gb}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">${price.price}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan={5} className="px-6 py-4 text-center">No data found</td></tr>
+                )}
               </tbody>
             </table>
           </div>
