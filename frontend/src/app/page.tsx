@@ -1,24 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface CloudPrice {
   id: number
@@ -58,82 +40,81 @@ export default function Home() {
   }
 
   return (
-    <main className="container mx-auto p-4">
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Cloud Price Comparison</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div className="container mx-auto p-4">
+      <div className="bg-white rounded-lg shadow-lg mb-8">
+        <div className="p-6">
+          <h2 className="text-2xl font-bold mb-4">Cloud Price Comparison</h2>
+        </div>
+        <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-            <Select
-              onValueChange={(value) =>
-                setFilters({ ...filters, cloud_type: value })
-              }
+            <select
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) => setFilters({ ...filters, cloud_type: e.target.value })}
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Cloud Provider" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="aws">AWS</SelectItem>
-                <SelectItem value="azure">Azure</SelectItem>
-                <SelectItem value="gcp">GCP</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="">Select Cloud Provider</option>
+              <option value="aws">AWS</option>
+              <option value="azure">Azure</option>
+              <option value="gcp">GCP</option>
+            </select>
 
-            <Input
+            <input
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Location"
-              onChange={(e) =>
-                setFilters({ ...filters, location: e.target.value })
-              }
+              onChange={(e) => setFilters({ ...filters, location: e.target.value })}
             />
 
-            <Input
+            <input
               type="number"
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Number of CPUs"
-              onChange={(e) =>
-                setFilters({ ...filters, num_cpus: e.target.value })
-              }
+              onChange={(e) => setFilters({ ...filters, num_cpus: e.target.value })}
             />
 
-            <Input
+            <input
               type="number"
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="RAM (GB)"
               onChange={(e) => setFilters({ ...filters, ram_gb: e.target.value })}
             />
           </div>
 
-          <Button onClick={fetchPrices}>Search Prices</Button>
-        </CardContent>
-      </Card>
+          <button
+            onClick={fetchPrices}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Search Prices
+          </button>
+        </div>
+      </div>
 
-      <Card>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Cloud Provider</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>CPUs</TableHead>
-                <TableHead>RAM (GB)</TableHead>
-                <TableHead>Price</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {prices.map((price) => (
-                <TableRow key={price.id}>
-                  <TableCell className="font-medium">
-                    {price.cloud_type.toUpperCase()}
-                  </TableCell>
-                  <TableCell>{price.location}</TableCell>
-                  <TableCell>{price.num_cpu}</TableCell>
-                  <TableCell>{price.ram_gb}</TableCell>
-                  <TableCell>${price.price}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </main>
+      <div className="bg-white rounded-lg shadow-lg">
+        <div className="p-6">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border-collapse table-auto">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cloud Provider</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPUs</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RAM (GB)</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {prices.map((price: CloudPrice) => (
+                  <tr key={price.id}>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium">{price.cloud_type.toUpperCase()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{price.location}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{price.num_cpu}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{price.ram_gb}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">${price.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
