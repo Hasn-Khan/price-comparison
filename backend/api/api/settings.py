@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'dotenv',
     'corsheaders',
     'rest_framework',
@@ -92,7 +93,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'djangodb'),
         'USER': os.getenv('DB_USER', 'digiusher_user'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'digiusher'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'HOST': os.getenv('POSTGRES_HOST', 'my-postgres'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
@@ -138,3 +139,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRONJOBS = [
+    ('*/5 * * * *', './management/commands/fetch_prices.py'),
+    # Add more cron jobs as needed
+]

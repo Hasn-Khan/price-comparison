@@ -2,13 +2,13 @@ version: '3'
 
 services:
   web:
-    build: ./prices/api
+    build: ./backend/api
     command: >
       sh -c "python manage.py migrate &&
              python manage.py seed_prices &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./prices/api:/app
+      - ./backend/api:/app
     ports:
       - "8000:8000"
     depends_on:

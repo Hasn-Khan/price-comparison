@@ -11,7 +11,6 @@ The DigiUsher Price Comparison Tool is a powerful application designed to help u
 ## Prerequisites
 
 - Docker
-- Docker Compose
 
 ## Setup Instructions
 
